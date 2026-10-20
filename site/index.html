@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>笔杆子工作法 · 公文写作 AI 技能</title>
+<meta name="description" content="读完四本公文写作书，提炼成一个 Claude 技能。覆盖15种法定公文与讲话、汇报、调研、述职等材料，开源免费。">
+<style>
+:root{--paper:#faf6ee;--card:#fffdf8;--ink:#1c1915;--sub:#6b6156;--line:#e6dccb;--red:#b8241c;--red2:#d4453a;--gold:#b08d57}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:"PingFang SC","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.serif{font-family:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","STSong","SimSun",serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(250,246,238,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.logo{font-weight:900;color:var(--red);letter-spacing:4px;font-size:20px}
+.navlinks{display:flex;gap:28px;font-size:15px;color:var(--sub)}
+.navlinks a:hover{color:var(--red)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:999px;font-size:16px;font-weight:600;transition:.2s}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 10px 30px rgba(184,36,28,.25)}
+.btn-red:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-line{border:1.5px solid var(--ink);color:var(--ink)}
+.btn-line:hover{border-color:var(--red);color:var(--red)}
+nav .btn{padding:8px 18px;font-size:14px}
+/* hero */
+.hero{padding:96px 0 80px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-120px;top:40px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(184,36,28,.10),transparent 65%)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--red);letter-spacing:3px;font-weight:600}
+.eyebrow:before{content:"";width:32px;height:2px;background:var(--red)}
+h1{font-size:68px;line-height:1.18;font-weight:900;margin:22px 0 26px;letter-spacing:1px}
+h1 em{font-style:normal;color:var(--red)}
+.lead{font-size:19px;color:var(--sub);max-width:520px}
+.cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+.stats{display:flex;gap:40px;margin-top:52px;padding-top:30px;border-top:1px solid var(--line)}
+.stats b{display:block;font-size:40px;color:var(--ink);line-height:1.1}
+.stats span{font-size:14px;color:var(--sub)}
+/* doc mock */
+.doc{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:38px 36px;box-shadow:0 30px 70px rgba(70,45,20,.14);transform:rotate(1.5deg);position:relative}
+.doc .hd{text-align:center;color:var(--red);font-weight:900;font-size:26px;letter-spacing:10px}
+.doc .rl{height:3px;background:var(--red);margin:16px 0 26px;position:relative}
+.doc .rl:after{content:"";position:absolute;left:0;right:0;top:7px;height:1px;background:var(--red)}
+.doc h4{text-align:center;font-size:20px;margin-bottom:18px}
+.doc p{font-size:14.5px;color:#3a342c;text-indent:2em;line-height:1.95}
+.doc .ph{background:#fbe9e6;color:var(--red);padding:0 4px;border-radius:3px}
+.doc .note{margin-top:20px;padding:14px 16px;border:1px dashed var(--gold);border-radius:6px;font-size:13px;color:#6d5a3a;text-indent:0;background:#fbf6ea}
+.seal{position:absolute;right:26px;bottom:-26px;width:104px;height:104px;border:4px solid var(--red);border-radius:50%;color:var(--red);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:21px;line-height:1.2;transform:rotate(-14deg);background:rgba(255,253,248,.7)}
+/* sections */
+section{padding:96px 0}
+.sec-hd{text-align:center;margin-bottom:56px}
+.sec-hd .no{color:var(--gold);font-size:14px;letter-spacing:4px}
+.sec-hd h2{font-size:42px;font-weight:900;margin:10px 0 12px}
+.sec-hd h2 em{font-style:normal;color:var(--red)}
+.sec-hd p{color:var(--sub);font-size:17px}
+.alt{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* pains */
+.pains{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.pain{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 24px}
+.pain .q{font-size:20px;font-weight:900;margin-bottom:10px}
+.pain p{font-size:15px;color:var(--sub)}
+/* types */
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.type{border:1px solid var(--line);border-radius:16px;padding:30px 28px;background:var(--paper)}
+.type h3{font-size:24px;font-weight:900;margin-bottom:6px}
+.type .c{color:var(--red);font-size:14px;margin-bottom:18px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{border:1px solid #e3c9c4;color:var(--red);background:#fff;padding:3px 12px;border-radius:999px;font-size:14px}
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.rule{display:flex;gap:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px}
+.rule .n{font-size:44px;font-weight:900;color:var(--red);line-height:1;min-width:58px}
+.rule h3{font-size:21px;margin-bottom:8px}
+.rule p{color:var(--sub);font-size:15.5px}
+.rule.wide{grid-column:span 2;background:linear-gradient(120deg,#fff 0%,#fbefe9 100%);border-color:#ecd2cc}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.flow:before{content:"";position:absolute;left:10%;right:10%;top:36px;height:2px;background:linear-gradient(90deg,var(--red),var(--gold))}
+.step{text-align:center;padding:0 12px;position:relative}
+.step .dot{width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:var(--card);border:2px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--red)}
+.step h3{font-size:20px;margin-bottom:8px}
+.step p{font-size:14.5px;color:var(--sub)}
+/* sources */
+.books{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.book{aspect-ratio:3/4;border-radius:6px 14px 14px 6px;padding:26px 22px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 8px 0 0 rgba(0,0,0,.18),0 18px 40px rgba(60,30,10,.18)}
+.book b{font-size:22px;line-height:1.35;font-weight:900}
+.book span{font-size:13px;opacity:.85}
+.b1{background:#8f1f18}.b2{background:#2d3a35}.b3{background:#a1773f}.b4{background:#33302b}
+.norm{text-align:center;margin-top:28px;color:var(--sub);font-size:15px}
+/* use */
+.use{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.u{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:30px}
+.u .k{font-size:15px;color:var(--gold);letter-spacing:3px}
+.u h3{font-size:22px;margin:8px 0}
+.u p{color:var(--sub);font-size:15px}
+code{background:#f1e8d8;padding:2px 8px;border-radius:5px;font-size:14px;color:#5a3c1d}
+.say{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.say span{background:var(--ink);color:#fff;padding:10px 18px;border-radius:18px 18px 18px 4px;font-size:15px}
+/* final */
+.final{background:var(--ink);color:#fff;text-align:center;padding:100px 0}
+.final h2{font-size:46px;font-weight:900;line-height:1.3}
+.final h2 em{font-style:normal;color:#ff8a7a}
+.final p{color:#bdb3a6;margin:18px 0 36px;font-size:17px}
+footer{background:var(--ink);color:#8d8478;font-size:13px;text-align:center;padding:0 24px 40px;line-height:1.9}
+@media(max-width:900px){
+ .navlinks{display:none}
+ .hero{padding:56px 0 64px}
+ .hero .wrap{grid-template-columns:1fr;gap:56px}
+ h1{font-size:38px}
+ .lead{font-size:17px}
+ .stats{gap:26px}.stats b{font-size:32px}
+ section{padding:68px 0}
+ .sec-hd h2{font-size:32px}
+ .pains,.books{grid-template-columns:repeat(2,1fr)}
+ .types,.use{grid-template-columns:1fr}
+ .rules{grid-template-columns:1fr}.rule.wide{grid-column:auto}
+ .flow{grid-template-columns:1fr;gap:26px}.flow:before{display:none}
+ .step{display:flex;text-align:left;gap:18px;align-items:flex-start}.step .dot{margin:0;min-width:56px;width:56px;height:56px;font-size:18px}
+ .final h2{font-size:32px}
+}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+ <a class="logo serif" href="#">笔杆子工作法</a>
+ <div class="navlinks"><a href="#types">能写什么</a><a href="#rules">硬规矩</a><a href="#flow">写稿流程</a><a href="#use">怎么用</a></div>
+ <a class="btn btn-red" href="https://github.com/wisemonkey1990/gongwen-xiezuo" target="_blank">GitHub</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+ <div>
+  <div class="eyebrow">CLAUDE 技能 · 开源免费</div>
+  <h1 class="serif">读完<em>四本书</em><br>把写材料的功夫<br>装进一个 AI 技能</h1>
+  <p class="lead">通知、请示、讲话、汇报、调研、述职……体制内常用材料，从定盘子到交稿子，按老笔杆子的方法一步步来。</p>
+  <div class="cta"><a class="btn btn-red" href="https://github.com/wisemonkey1990/gongwen-xiezuo" target="_blank">免费获取技能 →</a><a class="btn btn-line" href="#rules">看看它怎么写</a></div>
+  <div class="stats"><div><b class="serif">4</b><span>本写作专著</span></div><div><b class="serif">15</b><span>种法定公文</span></div><div><b class="serif">30+</b><span>种常用材料</span></div></div>
+ </div>
+ <div class="doc serif">
+  <div class="hd">笔杆子工作法</div><div class="rl"></div>
+  <h4>关于××工作情况的汇报</h4>
+  <p>按照××安排，现将我市××工作情况汇报如下。</p>
+  <p>一、主要做法和成效。全年办理××业务<span class="ph">【待补】</span>件，较上年增长<span class="ph">【待补】</span>%……</p>
+  <p>二、存在的问题。一是……二是……</p>
+  <div class="note">起草说明：①按“成效—问题—建议”起草；②数据待补；③××提法以最新文件为准。</div>
+  <div class="seal">绝不<br>编造</div>
+ </div>
+</div></header>
+
+<section><div class="wrap">
+ <div class="sec-hd"><div class="no">01 · 痛点</div><h2 class="serif">写材料，难在<em>哪里</em></h2><p>不是文笔不够，是这些地方没把握</p></div>
+ <div class="pains">
+  <div class="pain"><div class="q serif">体例拿不准</div><p>请示还是报告？纪要和简报怎么分？文种一错，内容再好也白搭。</p></div>
+  <div class="pain"><div class="q serif">提法怕写错</div><p>上级精神、政策术语、领导职务，一个字错都是硬伤。</p></div>
+  <div class="pain"><div class="q serif">写得空又长</div><p>套话一大堆，“什么都说到了，什么都没说透”。</p></div>
+  <div class="pain"><div class="q serif">改稿没方向</div><p>领导说“再改改”，却不知道该先改哪里。</p></div>
+ </div>
+</div></section>
+
+<section class="alt" id="types"><div class="wrap">
+ <div class="sec-hd"><div class="no">02 · 覆盖范围</div><h2 class="serif">能写<em>什么</em></h2><p>体制内常用的材料，基本都覆盖了</p></div>
+ <div class="types">
+  <div class="type"><h3 class="serif">法定公文</h3><div class="c">依《党政机关公文处理工作条例》</div><div class="tags"><span>通知</span><span>请示</span><span>报告</span><span>意见</span><span>函</span><span>纪要</span><span>批复</span><span>通报</span><span>决定</span><span>决议</span><span>公告</span><span>通告</span><span>公报</span><span>命令</span><span>议案</span></div></div>
+  <div class="type"><h3 class="serif">讲话发言</h3><div class="c">讲给谁听，就怎么写</div><div class="tags"><span>部署讲话</span><span>表态发言</span><span>主持词</span><span>汇报稿</span><span>口头汇报</span><span>研讨发言</span><span>致辞</span><span>传达提纲</span></div></div>
+  <div class="type"><h3 class="serif">其他材料</h3><div class="c">从调研到述职</div><div class="tags"><span>工作总结</span><span>述职报告</span><span>调研报告</span><span>起草说明</span><span>简报信息</span><span>政策建议</span><span>对照检查</span></div></div>
+ </div>
+</div></section>
+
+<section id="rules"><div class="wrap">
+ <div class="sec-hd"><div class="no">03 · 硬规矩</div><h2 class="serif">写材料最怕的，它<em>先替你防住</em></h2></div>
+ <div class="rules">
+  <div class="rule wide"><div class="n serif">01</div><div><h3>绝不编造</h3><p>数据、案例、领导原话、文号拿不准，一律标【待补】【待核】。句子照常写完整，填上数就能用——公文的权威来自真实。</p></div></div>
+  <div class="rule"><div class="n serif">02</div><div><h3>先定盘子再动笔</h3><p>文种、讲者、听者、目的一句话说清，吃透上情、内情、下情、外情。</p></div></div>
+  <div class="rule"><div class="n serif">03</div><div><h3>每篇附起草说明</h3><p>写清思路、假设、待补清单和需要领导定夺的选项，审稿省一半时间。</p></div></div>
+  <div class="rule"><div class="n serif">04</div><div><h3>改稿先大后小</h3><p>立意 → 结构 → 事实 → 语句 → 字词标点，不在毛坯上抠字眼。</p></div></div>
+  <div class="rule"><div class="n serif">05</div><div><h3>交稿前逐项自检</h3><p>文种、行文关系、提法、数字、GB/T 9704 格式，一项项过。</p></div></div>
+ </div>
+</div></section>
+
+<section class="alt" id="flow"><div class="wrap">
+ <div class="sec-hd"><div class="no">04 · 方法</div><h2 class="serif">老笔杆子的<em>五步法</em></h2><p>不是套模板，是一套想清楚、写明白、改到位的流程</p></div>
+ <div class="flow">
+  <div class="step"><div class="dot serif">定</div><div><h3>定盘子</h3><p>弄清写给谁、为什么写、依据是什么</p></div></div>
+  <div class="step"><div class="dot serif">搭</div><div><h3>搭架子</h3><p>是什么—为什么—怎么办，先出提纲</p></div></div>
+  <div class="step"><div class="dot serif">敲</div><div><h3>敲键子</h3><p>结论先行，观点统率材料，稿中有数</p></div></div>
+  <div class="step"><div class="dot serif">磨</div><div><h3>磨稿子</h3><p>四审一遍，对照十二种常见毛病</p></div></div>
+  <div class="step"><div class="dot serif">交</div><div><h3>交稿子</h3><p>正文可直接粘进 Word，附起草说明</p></div></div>
+ </div>
+</div></section>
+
+<section><div class="wrap">
+ <div class="sec-hd"><div class="no">05 · 来源</div><h2 class="serif">方法从<em>哪里</em>来</h2><p>通读四本书，提炼成可执行的规则</p></div>
+ <div class="books serif">
+  <div class="book b1"><b>笔杆子是<br>怎样炼成的</b><span>公文写作实战</span></div>
+  <div class="book b2"><b>笔杆子是<br>怎样炼成的 2</b><span>公文写作模板</span></div>
+  <div class="book b3"><b>怎样写作</b><span>任仲然</span></div>
+  <div class="book b4"><b>南周评论<br>写作课</b><span>南方周末 编</span></div>
+ </div>
+ <p class="norm">并依据《党政机关公文处理工作条例》与 GB/T 9704—2012《党政机关公文格式》</p>
+</div></section>
+
+<section class="alt" id="use"><div class="wrap">
+ <div class="sec-hd"><div class="no">06 · 上手</div><h2 class="serif">三步<em>就能用</em></h2></div>
+ <div class="use">
+  <div class="u"><div class="k">STEP 1</div><h3>下载技能</h3><p>GitHub 搜索 <code>gongwen-xiezuo</code>，下载仓库。</p></div>
+  <div class="u"><div class="k">STEP 2</div><h3>放进 Claude</h3><p>把 <code>gongwen-xiezuo/</code> 文件夹放进 Claude 的 skills 目录，或在 Claude 中上传该技能。</p></div>
+  <div class="u"><div class="k">STEP 3</div><h3>直接说需求</h3><p>不用记指令，像交代同事一样说就行。</p></div>
+ </div>
+ <div class="say"><span>帮我写一份召开××会议的请示</span><span>改改这份汇报</span><span>列个动员讲话提纲</span><span>把这份纪要把把关</span></div>
+</div></section>
+
+<div class="final"><div class="wrap">
+ <h2 class="serif">让 AI 写材料，<br>也守<em>笔杆子的规矩</em></h2>
+ <p>开源免费 · 持续更新</p>
+ <a class="btn btn-red" href="https://github.com/wisemonkey1990/gongwen-xiezuo" target="_blank">前往 GitHub 获取 →</a>
+</div></div>
+<footer>方法提炼自上述书籍，仅含归纳要点，不含书籍原文，版权归原作者所有，仅供学习交流。<br>gongwen-xiezuo · 笔杆子工作法</footer>
+</body></html>
